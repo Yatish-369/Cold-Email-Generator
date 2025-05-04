@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Smart HR Email Generator</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body, html { height: 100%; font-family: 'Segoe UI', sans-serif; overflow: hidden; }
+
+    video.bg-video {
+      position: fixed;
+      right: 0;
+      bottom: 0;
+      min-width: 100%;
+      min-height: 100%;
+      z-index: -1;
+      object-fit: cover;
+      filter: brightness(0.4);
+    }
+
+    .container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(15px);
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 0 30px rgba(0,0,0,0.4);
+      max-width: 600px;
+      width: 100%;
+      color: white;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      color: #e0e7ff;
+    }
+
+    label {
+      display: block;
+      margin-top: 1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 0.5rem;
+      border: none;
+      border-radius: 8px;
+      margin-bottom: 0.5rem;
+      font-size: 1rem;
+    }
+
+    .buttons {
+      text-align: center;
+      margin-top: 1rem;
+    }
+
+    button {
+      background-color: #4f46e5;
+      color: white;
+      padding: 0.6rem 1.2rem;
+      margin: 0.3rem;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #4338ca;
+    }
+
+    #output {
+      white-space: pre-wrap;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 1rem;
+      border-radius: 8px;
+      margin-top: 1.5rem;
+      font-family: monospace;
+      color: #e0f2fe;
+    }
+
+    #copyBtn, #moreBtn {
+      background-color: #10b981;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0;}
+      to {opacity: 1;}
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 1rem;
+        border-radius: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background video -->
+  <video class="bg-video" autoplay muted loop>
+    <source src="27725-365890983_small.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+
+  <div class="container">
+    <h1>Cold Email Generator</h1>
+
+    <label for="name">Your Name:</label>
+    <input type="text" id="name" placeholder="e.g., Yatish" />
+
+    <label for="company">Company Name:</label>
+    <input type="text" id="company" placeholder="e.g., Google" />
+
+    <label for="role">Role You're Applying For:</label>
+    <input type="text" id="role" placeholder="e.g., Software Engineer" />
+
+    <div id="output"></div>
+
+    <div class="buttons">
+      <button onclick="generateEmail()">Generate Email</button>
+      <button id="moreBtn" onclick="generateEmail()">More Options</button>
+      <button id="copyBtn" onclick="copyToClipboard()">Copy</button>
+    </div>
+  </div>
+
+  <script>
+    const templates = [
+      (name, company, role) => `
+Dear Hiring Manager at ${company},
+
+I'm ${name}, and I'm writing to express my strong interest in the ${role} position at your esteemed company. With a passion for innovation and a commitment to excellence, I believe I am a perfect fit for your team.
+
+I’d be grateful for the opportunity to demonstrate how I can contribute and grow with ${company}.
+
+Sincerely,  
+${name}
+      `.trim(),
+
+      (name, company, role) => `
+Hi Team ${company},
+
+This is ${name}. I’m excited about the possibility of joining you as a ${role}. Your company's vision resonates with me, and I am confident that I can bring energy, skill, and dedication to the table.
+
+I hope to connect and explore how I can contribute meaningfully.
+
+Warm regards,  
+${name}
+      `.trim(),
+
+      (name, company, role) => `
+Dear ${company} Recruitment Team,
+
+I’m ${name}, reaching out to express my sincere interest in the ${role} opportunity. I'm someone who learns fast, adapts quickly, and works hard. I’m confident I can thrive at ${company} and make a positive impact.
+
+Thank you for considering me.
+
+Best regards,  
+${name}
+      `.trim(),
+
+      (name, company, role) => `
+Hello ${company},
+
+My name is ${name}, and I’m applying for the ${role} role. I bring a combination of skills, determination, and creativity that makes me a strong candidate for your team.
+
+I’d love a chance to show you how I can contribute to your mission.
+
+Thanks and regards,  
+${name}
+      `.trim()
+    ];
+
+    function generateEmail() {
+      const name = document.getElementById('name').value.trim();
+      const company = document.getElementById('company').value.trim();
+      const role = document.getElementById('role').value.trim();
+
+      if (!name || !company || !role) {
+        alert("Please fill in all the fields.");
+        return;
+      }
+
+      const randomIndex = Math.floor(Math.random() * templates.length);
+      const email = templates[randomIndex](name, company, role);
+      document.getElementById('output').innerText = email;
+    }
+
+    function copyToClipboard() {
+      const text = document.getElementById('output').innerText;
+      if (!text) return;
+      navigator.clipboard.writeText(text).then(() => {
+        alert("Copied to clipboard!");
+      });
+    }
+  </script>
+
+</body>
+</html>
